@@ -17,12 +17,24 @@
                 "all": true
             },
             "dialog": {
-                "all": true, 
-                "ask": true, 
-                "confirm": true, 
-                "message": true, 
-                "open": true, 
-                "save": true 
+                "all": true,
+                "ask": true,
+                "confirm": true,
+                "message": true,
+                "open": true,
+                "save": true
+            },
+            "fs": {
+                "all": true,
+                "readFile": true,
+                "writeFile": true,
+                "readDir": true,
+                "copyFile": true,
+                "createDir": true,
+                "removeDir": true,
+                "removeFile": true,
+                "renameFile": true,
+                "exists": true
             },
             "shell": {
                 "all": false,
@@ -32,7 +44,12 @@
         "bundle": {
             "active": true,
             "targets": "all",
-            "identifier": "com.tauri.dev",
+            "identifier": "com.stanlys.dev",
+            "windows": {
+                "webviewInstallMode": {
+                    "type": "downloadBootstrapper"
+                }
+            },
             "icon": [
                 "icons/32x32.png",
                 "icons/128x128.png",

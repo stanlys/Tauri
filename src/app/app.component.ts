@@ -4,7 +4,8 @@ import { platform } from "@tauri-apps/api/os";
 import { getName } from "@tauri-apps/api/app";
 import { downloadDir } from "@tauri-apps/api/path";
 import { open } from "@tauri-apps/api/dialog";
-import { MatButtonModule } from "@angular/material/button";
+import readXlsxFile from "read-excel-file";
+import { readBinaryFile, BaseDirectory } from "@tauri-apps/api/fs";
 
 @Component({
     selector: "app-root",
@@ -14,6 +15,8 @@ import { MatButtonModule } from "@angular/material/button";
 export class AppComponent implements OnInit {
     greetingMessage = "";
     platformName = "";
+
+    tableCaptions: string[] = [];
 
     async test(): Promise<void> {
         this.platformName = await downloadDir();
@@ -42,6 +45,21 @@ export class AppComponent implements OnInit {
         } else {
             // user selected a single file
             console.log(selected);
+            const a = await readBinaryFile(selected);
+            readXlsxFile(a).then((rows) => {
+                // const captions = rows[0];
+                rows[0].forEach((el) => this.tableCaptions.push(el as string));
+                // this.tableCaptions = rows[0];
+                console.log(this.tableCaptions);
+            });
+            // fetch(selected)
+            //     .then((response) => response.blob())
+            //     .then((blob) => readXlsxFile(blob))
+            //     .then((rows) => {
+            //         console.log(rows);
+            //         // `rows` is an array of rows
+            //         // each row being an array of cells.
+            //     });
         }
     }
 

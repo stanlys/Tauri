@@ -15,8 +15,29 @@
         <button type="submit">Send</button>
         <button type="button" (click)="dialog($event)">Open Dialog</button>
     </form>
-    <button mat-fab color="warn">Mat Button</button>
     <p>{{ greetingMessage }}</p>
-
+    <dx-tab-panel id="tabPanel">
+        <!-- Configuration goes here -->
+        <dxi-item title="PbProg" icon="floppy">
+            <div class="tab">
+                <input id="greet-input" placeholder="Input Token" />
+                <button type="button" (click)="dialog($event)">Select Excel File</button>
+                <span class="row">
+                    <dx-button
+                        stylingMode="outlined"
+                        icon="folder"
+                        type="success"
+                        text="Open Excel File"
+                        (click)="dialog($event)"
+                    ></dx-button>
+                    <p><span class="red">*Warning... </span>First row is caption</p>
+                </span>
+                <dx-list *ngIf="tableCaptions.length > 0" [dataSource]="tableCaptions" [height]="400"> </dx-list>
+            </div>
+        </dxi-item>
+        <dxi-item title="DaDATA" icon="comment">
+            <!-- ... -->
+        </dxi-item>
+    </dx-tab-panel>
     <p>{{ platformName }}</p>
 </div>
