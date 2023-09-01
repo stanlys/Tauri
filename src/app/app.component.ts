@@ -48,7 +48,8 @@ export class AppComponent implements OnInit {
             const a = await readBinaryFile(selected);
             readXlsxFile(a).then((rows) => {
                 // const captions = rows[0];
-                rows[0].forEach((el) => this.tableCaptions.push(el as string));
+                this.tableCaptions = [];
+                rows[0].forEach((el, index) => this.tableCaptions.push(`${index} - ${el as string}`));
                 // this.tableCaptions = rows[0];
                 console.log(this.tableCaptions);
             });

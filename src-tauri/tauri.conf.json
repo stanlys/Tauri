@@ -7,7 +7,7 @@
         "withGlobalTauri": false
     },
     "package": {
-        "productName": "test",
+        "productName": "Work with Excel",
         "version": "0.0.0"
     },
     "tauri": {
@@ -34,7 +34,8 @@
                 "removeDir": true,
                 "removeFile": true,
                 "renameFile": true,
-                "exists": true
+                "exists": true,
+                "scope": ["$DOCUMENT/*"]
             },
             "shell": {
                 "all": false,
@@ -65,7 +66,7 @@
             {
                 "fullscreen": false,
                 "resizable": true,
-                "title": "test",
+                "title": "Work with Excel",
                 "width": 800,
                 "height": 600
             }
