@@ -4,6 +4,7 @@ import { platform } from "@tauri-apps/api/os";
 import { getName } from "@tauri-apps/api/app";
 import { downloadDir } from "@tauri-apps/api/path";
 import { open } from "@tauri-apps/api/dialog";
+import { MatButtonModule } from "@angular/material/button";
 
 @Component({
     selector: "app-root",
@@ -28,8 +29,8 @@ export class AppComponent implements OnInit {
             multiple: false,
             filters: [
                 {
-                    name: "Image",
-                    extensions: ["png", "jpeg"],
+                    name: "Excel",
+                    extensions: ["xlsx", "xls"],
                 },
             ],
         });
