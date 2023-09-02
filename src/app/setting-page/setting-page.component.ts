@@ -1,22 +1,29 @@
-import { Component } from "@angular/core";
-import { writeTextFile, BaseDirectory } from "@tauri-apps/api/fs";
+import { Component, OnInit } from "@angular/core";
+import { writeTextFile, BaseDirectory, readTextFile, exists } from "@tauri-apps/api/fs";
 
 @Component({
     selector: "app-setting-page",
     templateUrl: "./setting-page.component.html",
     styleUrls: ["./setting-page.component.css"],
 })
-export class SettingPageComponent {
+export class SettingPageComponent implements OnInit {
     employee = {
-        name: "John Heart",
-        position: "CEO",
-        hireDate: new Date(2012, 4, 13),
-        officeNumber: 901,
-        phone: "+1(213) 555-9392",
-        skype: "jheart_DX_skype",
-        email: "jheart@dx-email.com",
-        notes: "John has been in the Audio/Video industry since 1990.",
+        name: "",
+        position: "",
+        hireDate: new Date(),
+        officeNumber: 0,
+        phone: "",
+        skype: "",
+        email: "",
+        notes: "",
     };
+
+    async ngOnInit(): Promise<void> {
+        console.log("read default config");
+        const isLocalFileConfig = await exists("app.conf", { dir: BaseDirectory.Document });
+        if (isLocalFileConfig)
+            this.employee = JSON.parse(await readTextFile("app.conf", { dir: BaseDirectory.Document }));
+    }
 
     async save() {
         console.log(BaseDirectory.Document);

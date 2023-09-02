@@ -26,4 +26,3 @@ jobs:
       run: |
         npm install
         grunt
-        npm run tauri dev
