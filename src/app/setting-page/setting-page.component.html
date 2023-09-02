@@ -1,23 +1,18 @@
-<dx-form [formData]="employee" [colCount]="2">
-    <dxi-item itemType="group" caption="Employee">
-        <dxi-item dataField="name"></dxi-item>
-        <dxi-item dataField="position"></dxi-item>
-        <dxi-item dataField="hireDate"></dxi-item>
-        <dxi-item dataField="officeNumber"></dxi-item>
-    </dxi-item>
-    <dxi-item itemType="group" caption="Personal Information">
-        <dxi-item itemType="tabbed">
-            <dxo-tab-panel-options [height]="260"> </dxo-tab-panel-options>
-            <dxi-tab title="Contacts">
-                <dxi-item dataField="skype"></dxi-item>
-                <dxi-item dataField="phone"></dxi-item>
-                <dxi-item dataField="email"></dxi-item>
-            </dxi-tab>
-            <dxi-tab title="Note">
-                <dxi-item dataField="notes"></dxi-item>
-            </dxi-tab>
+<div class="tab">
+    <dx-form [formData]="config" [colCount]="2">
+        <dxi-item itemType="group" caption="PbProg">
+            <dxi-item dataField="PbProgToken"></dxi-item>
+            <dxi-item dataField="PbProgSecret"></dxi-item>
+            <dxi-item dataField="PbProgURL"></dxi-item>
         </dxi-item>
-    </dxi-item>
-</dx-form>
-<button>ffff</button>
-<dx-button title="Save" (onClick)="save()">rrrrr</dx-button>
+        <dxi-item itemType="group" caption="DADATA">
+            <dxi-item dataField="DADATAToken"></dxi-item>
+            <dxi-item dataField="DADATASecret"></dxi-item>
+            <dxi-item dataField="DADATAURL"></dxi-item>
+        </dxi-item>
+    </dx-form>
+    <div class="buttons">
+        <dx-button title="Save" (onClick)="clear()" type="danger">CLEAR</dx-button>
+        <dx-button title="Save" (onClick)="save()" type="success">SAVE</dx-button>
+    </div>
+</div>
