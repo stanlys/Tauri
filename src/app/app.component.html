@@ -31,6 +31,7 @@
                     <p><span class="red">*Warning... </span>First row is caption</p>
                 </span>
                 <dx-list *ngIf="tableCaptions.length > 0" [dataSource]="tableCaptions" [height]="200"> </dx-list>
+                <dx-button (onClick)="testservice()">тестирование сервиса</dx-button>
             </div>
         </dxi-item>
         <dxi-item title="DaDATA" icon="comment"> </dxi-item>

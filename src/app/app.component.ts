@@ -1,11 +1,10 @@
 import { Component, OnInit } from "@angular/core";
 import { invoke } from "@tauri-apps/api/tauri";
-import { platform } from "@tauri-apps/api/os";
-import { getName } from "@tauri-apps/api/app";
 import { downloadDir } from "@tauri-apps/api/path";
 import { open } from "@tauri-apps/api/dialog";
 import readXlsxFile from "read-excel-file";
 import { readBinaryFile, BaseDirectory } from "@tauri-apps/api/fs";
+import { ConfigServiceService } from "./services/config-service.service";
 
 @Component({
     selector: "app-root",
@@ -18,13 +17,17 @@ export class AppComponent implements OnInit {
 
     tableCaptions: string[] = [];
 
+    globalConfig = {};
+
+    constructor(private configServer: ConfigServiceService) {}
+
     async test(): Promise<void> {
         this.platformName = await downloadDir();
         console.log(this.platformName);
     }
 
-    ngOnInit() {
-        this.test();
+    async ngOnInit() {
+        this.globalConfig = await this.configServer.load();
     }
 
     async dialog(event: MouseEvent) {
@@ -72,5 +75,9 @@ export class AppComponent implements OnInit {
             this.greetingMessage = text;
         });
         this.test();
+    }
+
+    testservice() {
+        console.log(this.configServer.config);
     }
 }

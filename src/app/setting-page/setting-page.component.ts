@@ -1,5 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { writeTextFile, BaseDirectory, readTextFile, exists } from "@tauri-apps/api/fs";
+import { ConfigServiceService } from "../services/config-service.service";
+import { CONFIG_EMPTY } from "../interfaces/config-interface";
 
 @Component({
     selector: "app-setting-page",
@@ -16,19 +18,22 @@ export class SettingPageComponent implements OnInit {
         DaDataUrl: "",
     };
 
-    async ngOnInit(): Promise<void> {
-        console.log("read default config");
-        const isLocalFileConfig = await exists("app.conf", { dir: BaseDirectory.Document });
-        if (isLocalFileConfig)
-            this.config = JSON.parse(await readTextFile("app.conf", { dir: BaseDirectory.Document }));
+    constructor(private configService: ConfigServiceService) {
+    }
+
+    ngOnInit(): void {
+        // console.log("read default config");
+        console.log("444", this.configService.config);
+        this.config = this.configService.config;
+        // this.configService.load().then((config) => (this.config = config));
     }
 
     async save() {
-        console.log(BaseDirectory.Document);
-        await writeTextFile("app.conf", JSON.stringify(this.config), { dir: BaseDirectory.Document });
+        this.configService.save(this.config);
     }
 
     clear(): void {
-        this.config = { PbProgURL: "", PbProgSecret: "", PbProgToken: "", DaDataSecret:"", DaDataToken:"",DaDataUrl:""};
+        this.configService.clearLocal();
+        this.config = CONFIG_EMPTY;
     }
 }
