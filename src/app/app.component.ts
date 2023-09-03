@@ -26,8 +26,9 @@ export class AppComponent implements OnInit {
         console.log(this.platformName);
     }
 
-    async ngOnInit() {
-        this.globalConfig = await this.configServer.load();
+    ngOnInit() {
+        this.configServer.load();
+        this.globalConfig = this.configServer.config;
     }
 
     async dialog(event: MouseEvent) {

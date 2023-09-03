@@ -1,7 +1,8 @@
 import { Component, OnInit } from "@angular/core";
 import { writeTextFile, BaseDirectory, readTextFile, exists } from "@tauri-apps/api/fs";
 import { ConfigServiceService } from "../services/config-service.service";
-import { CONFIG_EMPTY } from "../interfaces/config-interface";
+import { CONFIG_EMPTY, IConfig } from "../interfaces/config-interface";
+import { Observable } from "rxjs";
 
 @Component({
     selector: "app-setting-page",
@@ -9,7 +10,7 @@ import { CONFIG_EMPTY } from "../interfaces/config-interface";
     styleUrls: ["./setting-page.component.css"],
 })
 export class SettingPageComponent implements OnInit {
-    config = {
+    config: IConfig = {
         PbProgToken: "",
         PbProgSecret: "",
         PbProgURL: "",
@@ -17,8 +18,10 @@ export class SettingPageComponent implements OnInit {
         DaDataSecret: "",
         DaDataUrl: "",
     };
+    cO = new Observable();
 
     constructor(private configService: ConfigServiceService) {
+        this.cO.subscribe((v) => console.log("next->", v));
     }
 
     ngOnInit(): void {
@@ -29,6 +32,7 @@ export class SettingPageComponent implements OnInit {
     }
 
     async save() {
+        console.log(this.config);
         this.configService.save(this.config);
     }
 
