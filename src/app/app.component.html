@@ -18,7 +18,7 @@
     <p>{{ greetingMessage }}</p>
     <dx-tab-panel id="tabPanel">
         <!-- Configuration goes here -->
-        <dxi-item title="PbProg" icon="floppy">
+        <dxi-item title="PbProg" icon="floppy" disabled="true">
             <div class="tab">
                 <span class="row">
                     <dx-button
@@ -30,11 +30,58 @@
                     ></dx-button>
                     <p><span class="red">*Warning... </span>First row is caption</p>
                 </span>
+                <dx-form [formData]="PbProgColumns">
+                    <dxi-item itemType="group" caption="Номера колонок (нумерация начинается с 0)">
+                        <dxi-item
+                            dataField="kn"
+                            caption="edwfwe"
+                            helpText="Номер колонки с кадастровым номером"
+                        ></dxi-item>
+                        <dxi-item
+                            dataField="Address"
+                            caption="Номер столбца адрес"
+                            helpText="Номер колонки с адресом"
+                        ></dxi-item>
+                    </dxi-item>
+                </dx-form>
+
                 <dx-list *ngIf="tableCaptions.length > 0" [dataSource]="tableCaptions" [height]="200"> </dx-list>
-                <dx-button (onClick)="testservice()">тестирование сервиса</dx-button>
+                <dx-button icon="runner" (onClick)="testservice()" type="success" stylingMode="outlined" text="RUN">
+                </dx-button>
             </div>
         </dxi-item>
-        <dxi-item title="DaDATA" icon="comment"> </dxi-item>
+        <dxi-item title="DaDATA" icon="comment">
+            <div class="tab">
+                <span class="row">
+                    <dx-button
+                        stylingMode="outlined"
+                        icon="folder"
+                        type="success"
+                        text="Open Excel File"
+                        (click)="dialog($event)"
+                    ></dx-button>
+                    <p><span class="red">*Warning... </span>First row is caption</p>
+                </span>
+                <dx-form [formData]="DaDataColumns">
+                    <dxi-item itemType="group" caption="Номера колонок (нумерация начинается с 0)">
+                        <dxi-item
+                            dataField="kn"
+                            caption="'CadNum'"
+                            text="tret"
+                            helpText="Номер колонки с кадастровым номером"
+                        >
+                            <dxo-label text="Кадастровый номер"></dxo-label>
+                        </dxi-item>
+                        <dxi-item dataField="Address" caption="" helpText="Номер колонки с адресом">
+                            <dxo-label text="Адрес"></dxo-label>
+                        </dxi-item>
+                    </dxi-item>
+                </dx-form>
+                <dx-list *ngIf="tableCaptions.length > 0" [dataSource]="tableCaptions" [height]="200"> </dx-list>
+                <dx-button icon="runner" (onClick)="runDadataQueries()" type="success" stylingMode="outlined" text="RUN">
+                </dx-button>
+            </div>
+        </dxi-item>
         <dxi-item title="Config" icon="preferences">
             <app-setting-page></app-setting-page>
         </dxi-item>

@@ -3,8 +3,9 @@ import { invoke } from "@tauri-apps/api/tauri";
 import { downloadDir } from "@tauri-apps/api/path";
 import { open } from "@tauri-apps/api/dialog";
 import readXlsxFile from "read-excel-file";
-import { readBinaryFile, BaseDirectory } from "@tauri-apps/api/fs";
+import { readBinaryFile } from "@tauri-apps/api/fs";
 import { ConfigServiceService } from "./services/config-service.service";
+import { CONFIG_EMPTY, IConfig } from "./interfaces/config-interface";
 
 @Component({
     selector: "app-root",
@@ -17,7 +18,17 @@ export class AppComponent implements OnInit {
 
     tableCaptions: string[] = [];
 
-    globalConfig = {};
+    globalConfig: IConfig = CONFIG_EMPTY;
+
+    DaDataColumns = {
+        kn: 0,
+        Address: 0,
+    };
+
+    PbProgColumns = {
+        kn: 0,
+        Address: 0,
+    };
 
     constructor(private configServer: ConfigServiceService) {}
 
@@ -80,5 +91,11 @@ export class AppComponent implements OnInit {
 
     testservice() {
         console.log(this.configServer.config);
+    }
+
+    runDadataQueries() {
+        if (this.DaDataColumns.kn === 0 || this.DaDataColumns.Address === 0) return;
+
+        console.log("WORK");
     }
 }
