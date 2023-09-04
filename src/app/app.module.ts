@@ -10,10 +10,19 @@ import {
 } from "devextreme-angular";
 import { AppComponent } from "./app.component";
 import { SettingPageComponent } from "./setting-page/setting-page.component";
+import { HttpClientModule } from "@angular/common/http";
 
 @NgModule({
     declarations: [AppComponent, SettingPageComponent],
-    imports: [BrowserModule, DxTabPanelModule, DxButtonModule, DxListModule, DxBoxModule, DxFormModule],
+    imports: [
+        BrowserModule,
+        DxTabPanelModule,
+        DxButtonModule,
+        DxListModule,
+        DxBoxModule,
+        DxFormModule,
+        HttpClientModule,
+    ],
     providers: [],
     bootstrap: [AppComponent],
 })
