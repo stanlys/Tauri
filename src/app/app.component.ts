@@ -203,33 +203,5 @@ export class AppComponent implements OnInit {
         //     });
 
         await writeTextFile({ path: "result.csv", contents: res }, { dir: BaseDirectory.Document });
-        // await workbook.xlsx.writeFile(`./${filename}.xlsx`);
     };
 }
-
-// saveXlsxFileDADATA = async (filename: string, data: Array<IDaDataToXSLX>): Promise<void> => {
-//     const workbook = new Excel.Workbook();
-//     const worksheetCorrectAddress = workbook.addWorksheet("Correct Address");
-//     worksheetCorrectAddress.columns = COLUMNS_DADATA;
-//     const worksheetErrorAddress = workbook.addWorksheet("Error Address");
-//     worksheetErrorAddress.columns = COLUMNS_DADATA;
-
-//     data.forEach((answer) => {
-//         if (answer.status === 200) {
-//             worksheetCorrectAddress.addRow(answer);
-//         } else {
-//             worksheetErrorAddress.addRow(answer);
-//         }
-//     });
-
-//     // Promise.all(data).then(async (answers) => {
-//     //     answers.forEach((answer) => {
-//     //         if (answer.status === 200) {
-//     //             worksheetCorrectAddress.addRow(answer);
-//     //         } else {
-//     //             worksheetErrorAddress.addRow(answer);
-//     //         }
-//     //     });
-//     await workbook.xlsx.writeFile(`${BaseDirectory.Document}/${filename}.xlsx`);
-// };
-// }
