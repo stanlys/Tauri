@@ -11,6 +11,7 @@ import {
 import { AppComponent } from "./app.component";
 import { SettingPageComponent } from "./setting-page/setting-page.component";
 import { HttpClientModule } from "@angular/common/http";
+import { DxLoadIndicatorModule } from "devextreme-angular";
 
 @NgModule({
     declarations: [AppComponent, SettingPageComponent],
@@ -22,6 +23,7 @@ import { HttpClientModule } from "@angular/common/http";
         DxBoxModule,
         DxFormModule,
         HttpClientModule,
+        DxLoadIndicatorModule,
     ],
     providers: [],
     bootstrap: [AppComponent],
