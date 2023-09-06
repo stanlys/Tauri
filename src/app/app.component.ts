@@ -12,6 +12,10 @@ import { sleep } from "sleep-ts";
 import { COLUMNS_DADATA } from "./interfaces/schema";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Body, fetch } from "@tauri-apps/api/http";
+import { DxButtonComponent } from "devextreme-angular";
+import { saveAs } from "file-saver";
+import * as Excel from "exceljs";
+
 @Component({
     selector: "app-root",
     templateUrl: "./app.component.html",
@@ -42,6 +46,9 @@ export class AppComponent implements OnInit {
     isLoadIndicatorVisible = false;
 
     @ViewChild("fileName") nameParagraph!: ElementRef<HTMLParagraphElement>;
+    @ViewChild(DxButtonComponent, { static: false }) runBtn!: DxButtonComponent;
+    @ViewChild("test") testbutton!: ElementRef<HTMLButtonElement>;
+    @ViewChild("run") button!: HTMLElement;
 
     constructor(private configServer: ConfigServiceService, private hostElem: ElementRef) {
         console.log(this.hostElem.nativeElement);
@@ -97,16 +104,8 @@ export class AppComponent implements OnInit {
 
     async runDadataQueries() {
         if (this.DaDataColumns.kn === 0 || this.DaDataColumns.Address === 0) return;
-
-        const a = await readBinaryFile(this.selectedExcelFile);
         this.isLoadIndicatorVisible = true;
-        // readXlsxFile(a).then((rows) => {
-        //     // const captions = rows[0];
-        //     this.tableCaptions = [];
-        //     rows[0].forEach((el, index) => this.tableCaptions.push(`${index} - ${el as string}`));
-        //     // this.tableCaptions = rows[0];
-        // });
-        // console.log("WORK");
+        const a = await readBinaryFile(this.selectedExcelFile);
 
         readXlsxFile(a).then(async (rows) => {
             const dataAddress: Array<IDaDataToXSLX> = [];
@@ -143,20 +142,15 @@ export class AppComponent implements OnInit {
                         await sleep(100);
                     }
                 }
+                await sleep(5000);
             }
-            // getCorrectAddressFromRow(rows, 25);
-            this.saveXlsxFileDADATA("test_DADATA", dataAddress);
+            this.saveXlsxFileDADATA2(`result.xlsx`, dataAddress);
             console.log("All ok!!!!");
             this.isLoadIndicatorVisible = false;
         });
     }
 
     saveXlsxFileDADATA = async (filename: string, data: Array<IDaDataToXSLX>): Promise<void> => {
-        // const workbook = new Excel.Workbook();
-        // const worksheetCorrectAddress = workbook.addWorksheet("Correct Address");
-        // worksheetCorrectAddress.columns = COLUMNS_DADATA;
-        // const worksheetErrorAddress = workbook.addWorksheet("Error Address");
-        // worksheetErrorAddress.columns = COLUMNS_DADATA;
         let res = "";
 
         // console.log(data);
@@ -202,34 +196,42 @@ export class AppComponent implements OnInit {
         //         res += a + "\r\n";
         //     });
 
-        await writeTextFile({ path: "result.csv", contents: res }, { dir: BaseDirectory.Document });
+        // await writeTextFile({ path: "result.csv", contents: res }, { dir: BaseDirectory.Document });
         // await workbook.xlsx.writeFile(`./${filename}.xlsx`);
+    };
+
+    testViewChield() {
+        console.log(this.runBtn);
+        console.log(this.testbutton.nativeElement.textContent);
+        // this.saveXlsxFileDADATA2("1111", []);
+        const workbook = new Excel.Workbook();
+        const worksheetCorrectAddress = workbook.addWorksheet("Correct Address");
+        worksheetCorrectAddress.columns = COLUMNS_DADATA;
+        const worksheetErrorAddress = workbook.addWorksheet("Error Address");
+        worksheetErrorAddress.columns = COLUMNS_DADATA;
+        workbook.xlsx.writeBuffer().then((data) => {
+            let blob = new Blob([data], {
+                type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+            });
+            // saveAs(blob, `${BaseDirectory.Document}/${filename}.xlsx`);
+        });
+    }
+
+    saveXlsxFileDADATA2 = async (filename: string, data: Array<IDaDataToXSLX>): Promise<void> => {
+        const workbook = new Excel.Workbook();
+        const worksheetCorrectAddress = workbook.addWorksheet("Correct Address");
+        worksheetCorrectAddress.columns = COLUMNS_DADATA;
+        const worksheetErrorAddress = workbook.addWorksheet("Error Address");
+        worksheetErrorAddress.columns = COLUMNS_DADATA;
+        worksheetCorrectAddress.addRows(data);
+        workbook.xlsx.writeBuffer().then((data) => {
+            let blob = new Blob([data], {
+                type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+            });
+            saveAs(blob, filename);
+        });
+        // await workbook.xlsx.writeFile(`${BaseDirectory.Document}/${filename}.xlsx`);
     };
 }
 
-// saveXlsxFileDADATA = async (filename: string, data: Array<IDaDataToXSLX>): Promise<void> => {
-//     const workbook = new Excel.Workbook();
-//     const worksheetCorrectAddress = workbook.addWorksheet("Correct Address");
-//     worksheetCorrectAddress.columns = COLUMNS_DADATA;
-//     const worksheetErrorAddress = workbook.addWorksheet("Error Address");
-//     worksheetErrorAddress.columns = COLUMNS_DADATA;
-
-//     data.forEach((answer) => {
-//         if (answer.status === 200) {
-//             worksheetCorrectAddress.addRow(answer);
-//         } else {
-//             worksheetErrorAddress.addRow(answer);
-//         }
-//     });
-
-//     // Promise.all(data).then(async (answers) => {
-//     //     answers.forEach((answer) => {
-//     //         if (answer.status === 200) {
-//     //             worksheetCorrectAddress.addRow(answer);
-//     //         } else {
-//     //             worksheetErrorAddress.addRow(answer);
-//     //         }
-//     //     });
-//     await workbook.xlsx.writeFile(`${BaseDirectory.Document}/${filename}.xlsx`);
-// };
 // }

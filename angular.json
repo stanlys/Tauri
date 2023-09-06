@@ -22,15 +22,16 @@
                         "tsConfig": "tsconfig.app.json",
                         "assets": ["src/favicon.ico", "src/assets"],
                         "styles": ["node_modules/devextreme/dist/css/dx.darkmoon.css", "src/styles.css"],
-                        "scripts": []
+                        "scripts": [],
+                        "allowedCommonJsDependencies": ["sleep-ts"]
                     },
                     "configurations": {
                         "production": {
                             "budgets": [
                                 {
                                     "type": "initial",
-                                    "maximumWarning": "500kb",
-                                    "maximumError": "1mb"
+                                    "maximumWarning": "5000kb",
+                                    "maximumError": "4mb"
                                 },
                                 {
                                     "type": "anyComponentStyle",
