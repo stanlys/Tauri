@@ -6,7 +6,7 @@ import readXlsxFile from "read-excel-file";
 import { readBinaryFile, writeTextFile } from "@tauri-apps/api/fs";
 import { ConfigServiceService } from "./services/config-service.service";
 import { CONFIG_EMPTY, IConfig } from "./interfaces/config-interface";
-import { IDaDataShortResponse, IDaDataToXSLX } from "./interfaces/interfaces";
+import { IDaDataShortResponse, IDaDataToXSLX, IPbProgData } from "./interfaces/interfaces";
 import daDataRequest from "./shared/dadata";
 import { sleep } from "sleep-ts";
 import { COLUMNS_DADATA } from "./interfaces/schema";
@@ -39,13 +39,18 @@ export class AppComponent implements OnInit {
     PbProgColumns = {
         kn: 0,
         Address: 0,
+        rowStart: 1,
+        rowEnd: 1,
     };
 
     selectedExcelFile = "";
 
+    selectedExcelFilePbProg = "";
+
     isLoadIndicatorVisible = false;
 
     @ViewChild("fileName") nameParagraph!: ElementRef<HTMLParagraphElement>;
+    @ViewChild("fileNamePbprog") nameParagraphPbProg!: ElementRef<HTMLParagraphElement>;
     @ViewChild(DxButtonComponent, { static: false }) runBtn!: DxButtonComponent;
     @ViewChild("test") testbutton!: ElementRef<HTMLButtonElement>;
     @ViewChild("run") button!: HTMLElement;
@@ -90,6 +95,31 @@ export class AppComponent implements OnInit {
         }
     }
 
+    async dialogPbProg(event: MouseEvent) {
+        const selected = await open({
+            multiple: false,
+            filters: [
+                {
+                    name: "Excel",
+                    extensions: ["xlsx", "xls"],
+                },
+            ],
+        });
+        if (Array.isArray(selected)) {
+            // user selected multiple files
+            console.log(selected);
+        } else if (selected === null) {
+            // user cancelled the selection
+        } else {
+            // user selected a single file
+            console.log(this.nameParagraphPbProg.nativeElement.textContent);
+            this.selectedExcelFilePbProg = selected;
+            console.log(this.selectedExcelFilePbProg);
+            const selectedPath = selected.split("\\");
+            this.nameParagraphPbProg.nativeElement.textContent = selectedPath[selectedPath.length - 1];
+        }
+    }
+
     greet(event: SubmitEvent, name: string): void {
         event.preventDefault();
         invoke<string>("greet", { name }).then((text) => {
@@ -100,6 +130,74 @@ export class AppComponent implements OnInit {
 
     testservice() {
         console.log(this.configServer.config);
+    }
+
+    async runPbProgQueries2() {
+        const response = await fetch<Array<IPbProgData>>("https://data.pbprog.ru/api/address/full-address/parse", {
+            method: "POST",
+            body: Body.json({
+                query: "Воронежская область, г Воронеж, ул Конституции, 99",
+                count: 1,
+            }),
+            headers: {
+                Authorization: this.globalConfig.PbProgToken,
+            },
+        });
+        console.log(response);
+    }
+
+    async runPbProgQueries() {
+        console.log("PbProg !!!!!");
+        if (this.PbProgColumns.kn === 0 || this.PbProgColumns.Address === 0) return;
+        this.isLoadIndicatorVisible = true;
+        const a = await readBinaryFile(this.selectedExcelFilePbProg);
+
+        readXlsxFile(a).then(async (rows) => {
+            const dataAddress: Array<IDaDataToXSLX> = [];
+            this.globalConfig = this.configServer.config;
+            console.log(this.globalConfig);
+            if (rows.length >= this.PbProgColumns.rowEnd) {
+                for (let i = this.PbProgColumns.rowStart; i <= this.PbProgColumns.rowEnd; i++) {
+                    console.log(`work with ${i} row `);
+                    const rowAddress = rows[i][this.PbProgColumns.Address] as string;
+                    const kn = rows[i][this.PbProgColumns.kn] as string | "";
+                    if (rowAddress != null) {
+                        const searchAddress = rowAddress.replace(/\(/g, "").replace(/\)/g, "");
+                        console.log(this.globalConfig.PbProgURL);
+                        const response = await fetch<Array<IPbProgData>>(
+                            "https://data.pbprog.ru/api/address/full-address/parse",
+                            {
+                                method: "POST",
+                                body: Body.json({
+                                    query: "Воронежская область, г Воронеж, ул Конституции, 99",
+                                    count: 1,
+                                }),
+                                headers: {
+                                    Authorization: this.globalConfig.PbProgToken,
+                                    "Content-Type": "application/json",
+                                },
+                            }
+                        );
+                        console.log(response);
+                        // if (response.data) {
+                        //     const answer: IDaDataToXSLX = {
+                        //         kn: kn,
+                        //         status: 200,
+                        //         shortAddress: searchAddress,
+                        //         ...response.data[0],
+                        //     };
+                        //     dataAddress.push(answer);
+                        // }
+                        await sleep(2000);
+                    }
+                }
+                await sleep(5000);
+            }
+            this.saveXlsxFileDADATA2(`result.xlsx`, dataAddress);
+            console.log("All ok!!!!");
+        });
+
+        this.isLoadIndicatorVisible = false;
     }
 
     async runDadataQueries() {

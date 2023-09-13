@@ -2,7 +2,7 @@
     <p>{{ greetingMessage }}</p>
     <dx-tab-panel id="tabPanel">
         <!-- Configuration goes here -->
-        <dxi-item title="PbProg" icon="floppy" disabled="true">
+        <dxi-item title="PbProg" icon="floppy">
             <div class="tab">
                 <span class="row">
                     <dx-button
@@ -10,29 +10,49 @@
                         icon="folder"
                         type="success"
                         text="Open Excel File"
-                        (click)="dialog($event)"
+                        (click)="dialogPbProg($event)"
                     ></dx-button>
-                    <p><span class="red">*Warning... </span>First row is caption</p>
-                    <span> {{ selectedExcelFile }}</span>
+                    <p #fileNamePbprog><span class="red">*Warning... </span>First row is caption</p>
                 </span>
-                <dx-form [formData]="PbProgColumns">
-                    <dxi-item itemType="group" caption="Номера колонок (нумерация начинается с 0)">
-                        <dxi-item
-                            dataField="kn"
-                            caption="edwfwe"
-                            helpText="Номер колонки с кадастровым номером"
-                        ></dxi-item>
-                        <dxi-item
-                            dataField="Address"
-                            caption="Номер столбца адрес"
-                            helpText="Номер колонки с адресом"
-                        ></dxi-item>
+                <dx-form [formData]="PbProgColumns" [colCount]="2">
+                    <dxi-item itemType="group" caption="Номера колонок">
+                        <dxi-item dataField="kn" caption="'CadNum'" text="tret">
+                            <dxo-label text="Кадастровый номер"></dxo-label>
+                        </dxi-item>
+                        <dxi-item dataField="Address" caption="" helpText="">
+                            <dxo-label text="Адрес"></dxo-label>
+                        </dxi-item>
+                    </dxi-item>
+                    <dxi-item itemType="group" caption="Обработка строк">
+                        <dxi-item dataField="rowStart" caption="'CadNum'" text="tret" helpText="">
+                            <dxo-label text="C"></dxo-label>
+                        </dxi-item>
+                        <dxi-item dataField="rowEnd" caption="" helpText="">
+                            <dxo-label text="По"></dxo-label>
+                        </dxi-item>
                     </dxi-item>
                 </dx-form>
+                <dx-load-indicator [(visible)]="isLoadIndicatorVisible"> </dx-load-indicator>
 
                 <dx-list *ngIf="tableCaptions.length > 0" [dataSource]="tableCaptions" [height]="200"> </dx-list>
-                <dx-button icon="runner" (onClick)="testservice()" type="success" stylingMode="outlined" text="RUN">
+                <dx-button
+                    #run
+                    icon="runner"
+                    (onClick)="runPbProgQueries()"
+                    type="success"
+                    stylingMode="outlined"
+                    text="RUN PbProg"
+                >
                 </dx-button>
+                <dx-button
+                    icon="runner"
+                    (onClick)="runPbProgQueries2()"
+                    type="success"
+                    stylingMode="outlined"
+                    text="Test PbProg"
+                >
+                </dx-button>
+                <!-- <button (click)="testViewChield()" #test>test</button> -->
             </div>
         </dxi-item>
         <dxi-item title="DaDATA" icon="comment">
