@@ -294,8 +294,7 @@ export class AppComponent implements OnInit {
         //         res += a + "\r\n";
         //     });
 
-        // await writeTextFile({ path: "result.csv", contents: res }, { dir: BaseDirectory.Document });
-        // await workbook.xlsx.writeFile(`./${filename}.xlsx`);
+        await writeTextFile({ path: "result.csv", contents: res }, { dir: BaseDirectory.Document });
     };
 
     testViewChield() {
@@ -331,5 +330,8 @@ export class AppComponent implements OnInit {
         // await workbook.xlsx.writeFile(`${BaseDirectory.Document}/${filename}.xlsx`);
     };
 }
+<<<<<<< HEAD
 
 // }
+=======
+>>>>>>> 7e89c88ad71c3bef026190c38f50d6fd6d37ac1e
